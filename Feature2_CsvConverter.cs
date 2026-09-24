@@ -16,32 +16,39 @@ namespace ParamToolbox
 
         public static void Execute()
         {
-            Console.WriteLine("=== FEATURE 2: XML & JSON to CSV Converter (Advanced) ===");
+            Console.WriteLine(I18n.T("=== FEATURE 2: XML & JSON to CSV Converter (Advanced) ===",
+                                     "=== FEATURE 2: XML & JSON to CSV Converter (Advanced) ==="));
 
-            Console.Write("Nhập đường dẫn thư mục chứa file XML (hoặc kéo thả folder vào): ");
+            Console.Write(I18n.T("Enter XML folder path (or drag & drop): ",
+                                 "Nhập đường dẫn thư mục chứa file XML (hoặc kéo thả folder vào): "));
             string xmlFolderPath = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write("Nhập đường dẫn thư mục chứa file JSON (hoặc kéo thả folder vào): ");
+            Console.Write(I18n.T("Enter JSON folder path (or drag & drop): ",
+                                 "Nhập đường dẫn thư mục chứa file JSON (hoặc kéo thả folder vào): "));
             string jsonFolderPath = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write("Nhập đường dẫn và tên file xuất CSV (vd: .../output.csv): ");
+            Console.Write(I18n.T("Enter CSV output path (e.g. .../output.csv): ",
+                                 "Nhập đường dẫn và tên file xuất CSV (vd: .../output.csv): "));
             string csvFilePath = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write("Nhập tổng số lượng Merchant cần tổng hợp [Mặc định: 6]: ");
+            Console.Write(I18n.T("Enter total number of Merchants to consolidate [Default: 6]: ",
+                                 "Nhập tổng số lượng Merchant cần tổng hợp [Mặc định: 6]: "));
             string merchantStr = Console.ReadLine()?.Trim() ?? "";
             int merchantQuantity = string.IsNullOrEmpty(merchantStr) ? 6 : (int.TryParse(merchantStr, out int m) ? m : 6);
             if (merchantQuantity <= 0) merchantQuantity = 6;
 
             if (!Directory.Exists(xmlFolderPath) || !Directory.Exists(jsonFolderPath))
             {
-                Console.WriteLine("Lỗi: Thư mục XML hoặc JSON không tồn tại!");
+                Console.WriteLine(I18n.T("Error: XML or JSON folder does not exist!",
+                                         "Lỗi: Thư mục XML hoặc JSON không tồn tại!"));
                 return;
             }
 
             if (Directory.Exists(csvFilePath) || string.IsNullOrEmpty(csvFilePath) || !csvFilePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
             {
                 csvFilePath = Path.Combine(Directory.Exists(csvFilePath) ? csvFilePath : Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "output.csv");
-                Console.WriteLine($"Sẽ lưu file CSV tại: {csvFilePath}");
+                Console.WriteLine(I18n.T($"Will save CSV file at: {csvFilePath}",
+                                         $"Sẽ lưu file CSV tại: {csvFilePath}"));
             }
 
             try
@@ -52,13 +59,15 @@ namespace ParamToolbox
 
                 if (categorizedFiles.ContainsKey(SYSTEM_TEMPLATE))
                 {
-                    Console.WriteLine($"\n=== Xử lý System Template ===");
+                    Console.WriteLine(I18n.T($"\n=== Processing System Template ===",
+                                             $"\n=== Xử lý System Template ==="));
                     ProcessSystemTemplate(categorizedFiles[SYSTEM_TEMPLATE], jsonFolderPath, allRows);
                 }
 
                 for (int merchantIndex = 1; merchantIndex <= merchantQuantity; merchantIndex++)
                 {
-                    Console.WriteLine($"\n=== Xử lý Merchant {merchantIndex}/{merchantQuantity} ===");
+                    Console.WriteLine(I18n.T($"\n=== Processing Merchant {merchantIndex}/{merchantQuantity} ===",
+                                             $"\n=== Xử lý Merchant {merchantIndex}/{merchantQuantity} ==="));
                     if (categorizedFiles.ContainsKey(MERCHANT_TEMPLATE))
                     {
                         ProcessMerchantTemplate(categorizedFiles[MERCHANT_TEMPLATE], jsonFolderPath, allRows, merchantIndex);
@@ -71,19 +80,24 @@ namespace ParamToolbox
 
                 if (categorizedFiles.ContainsKey(SURCHARGE_TEMPLATE))
                 {
-                    Console.WriteLine($"\n=== Xử lý Surcharge Template ===");
+                    Console.WriteLine(I18n.T($"\n=== Processing Surcharge Template ===",
+                                             $"\n=== Xử lý Surcharge Template ==="));
                     ProcessSurchargeTemplate(categorizedFiles[SURCHARGE_TEMPLATE], jsonFolderPath, allRows);
                 }
 
-                Console.WriteLine($"\nĐang tạo file CSV: {csvFilePath}");
+                Console.WriteLine(I18n.T($"\nCreating CSV file: {csvFilePath}",
+                                         $"\nĐang tạo file CSV: {csvFilePath}"));
                 CreateCsvFile(csvFilePath, allRows);
 
-                Console.WriteLine($"\nHoàn thành! Đã tạo {allRows.Count} dòng dữ liệu.");
+                Console.WriteLine(I18n.T($"\nCompleted! Generated {allRows.Count} rows of data.",
+                                         $"\nHoàn thành! Đã tạo {allRows.Count} dòng dữ liệu."));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\nLỗi: {ex.Message}");
-                Console.WriteLine($"Chi tiết: {ex.StackTrace}");
+                Console.WriteLine(I18n.T($"\nError: {ex.Message}",
+                                         $"\nLỗi: {ex.Message}"));
+                Console.WriteLine(I18n.T($"Details: {ex.StackTrace}",
+                                         $"Chi tiết: {ex.StackTrace}"));
             }
         }
 
@@ -104,7 +118,7 @@ namespace ParamToolbox
                 else if (fileName.Contains("singleapp_merchant")) AddToCategory(categorized, MERCHANT_TEMPLATE, file);
                 else if (fileName.Contains("cashier")) AddToCategory(categorized, CASHIER_TEMPLATE, file);
                 else if (fileName.Contains("surcharge")) AddToCategory(categorized, SURCHARGE_TEMPLATE, file);
-                else Console.WriteLine($"Không xác định được template cho file: {fileName}");
+                else Console.WriteLine(I18n.T($"Unrecognized template for file: {fileName}", $"Không xác định được template cho file: {fileName}"));
             }
             return categorized;
         }

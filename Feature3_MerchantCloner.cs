@@ -11,26 +11,32 @@ namespace ParamToolbox
     {
         public static void Execute()
         {
-            Console.WriteLine("=== FEATURE 3: Merchant XML Template Cloner & Zipper ===");
+            Console.WriteLine(I18n.T("=== FEATURE 3: Merchant XML Template Cloner & Zipper ===",
+                                     "=== FEATURE 3: Merchant XML Template Cloner & Zipper ==="));
 
-            Console.Write("Nhập đường dẫn file template cần clone (vd: SingleApp_merchant_1.xml): ");
+            Console.Write(I18n.T("Enter template XML path to clone (e.g. SingleApp_merchant_1.xml): ",
+                                 "Nhập đường dẫn file template cần clone (vd: SingleApp_merchant_1.xml): "));
             string inputPath = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write("Nhập đường dẫn thư mục xuất kết quả (vd: C:\\Outputs) (Để trống tự tạo trong folder chứa template): ");
+            Console.Write(I18n.T("Enter output directory path (leave blank to create in template folder): ",
+                                 "Nhập đường dẫn thư mục xuất kết quả (vd: C:\\Outputs) (Để trống tự tạo trong folder chứa template): "));
             string outputDir = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write("Nhập TỔNG SỐ LƯỢNG file cần clone [Mặc định: 30]: ");
+            Console.Write(I18n.T("Enter TOTAL NUMBER of files to clone [Default: 30]: ",
+                                 "Nhập TỔNG SỐ LƯỢNG file cần clone [Mặc định: 30]: "));
             string totalStr = Console.ReadLine()?.Trim() ?? "";
             int totalFiles = string.IsNullOrEmpty(totalStr) ? 30 : (int.TryParse(totalStr, out int t) ? t : 0);
             if (totalFiles <= 0)
             {
-                Console.WriteLine("Số lượng không hợp lệ!");
+                Console.WriteLine(I18n.T("Invalid quantity!",
+                                         "Số lượng không hợp lệ!"));
                 return;
             }
 
             if (!File.Exists(inputPath))
             {
-                Console.WriteLine("Lỗi: Không tìm thấy file template gốc.");
+                Console.WriteLine(I18n.T("Error: Source template file not found.",
+                                         "Lỗi: Không tìm thấy file template gốc."));
                 return;
             }
 
@@ -160,7 +166,8 @@ namespace ParamToolbox
                     generatedFiles.Add(outFilePath);
                 }
 
-                Console.WriteLine("Đang xử lý đóng gói và copy file theo luồng cấu hình mới...");
+                Console.WriteLine(I18n.T("Packaging and copying files according to configuration...",
+                                         "Đang xử lý đóng gói và copy file theo luồng cấu hình mới..."));
 
                 var zipGroups = new List<(int Start, int End)>
                 {
@@ -170,7 +177,7 @@ namespace ParamToolbox
                     (17, 30)
                 };
 
-                // Hỗ trợ trường hợp nếu file clone > 30 thì phần dư sẽ tự zip chung
+                // Support files > 30
                 if (totalFiles > 30)
                 {
                     zipGroups.Add((31, totalFiles));
@@ -187,14 +194,15 @@ namespace ParamToolbox
 
                     if (startIdx == 1 && endIdx == 1)
                     {
-                        // Merchant 1 không zip
+                        // Merchant 1 is uncompressed
                         for (int i = startIdx; i <= actualEndIdx; i++)
                         {
                             string f = generatedFiles[i - 1]; // 0-indexed
                             string destPath = Path.Combine(outputDir, Path.GetFileName(f));
                             if (File.Exists(destPath)) File.Delete(destPath);
                             File.Copy(f, destPath);
-                            Console.WriteLine($"✓ Đã xuất file không nén: {Path.GetFileName(f)}");
+                            Console.WriteLine(I18n.T($"✓ Exported uncompressed file: {Path.GetFileName(f)}",
+                                                     $"✓ Đã xuất file không nén: {Path.GetFileName(f)}"));
                         }
                     }
                     else
@@ -219,7 +227,8 @@ namespace ParamToolbox
 
                         if (hasFiles)
                         {
-                            Console.WriteLine($"✓ Cụm {startIdx}-{actualEndIdx}: Đã đóng gói vào {Path.GetFileName(zipFilePath)}");
+                            Console.WriteLine(I18n.T($"✓ Batch {startIdx}-{actualEndIdx}: Packaged into {Path.GetFileName(zipFilePath)}",
+                                                     $"✓ Cụm {startIdx}-{actualEndIdx}: Đã đóng gói vào {Path.GetFileName(zipFilePath)}"));
                         }
                         else
                         {
@@ -228,15 +237,18 @@ namespace ParamToolbox
                     }
                 }
 
-                // Dọn dẹp folder tmp
+                // Cleanup tmp folder
                 Directory.Delete(tmpDir, true);
 
-                Console.WriteLine($"\nHoàn tất! Kết quả đã lưu tại: {outputDir}");
+                Console.WriteLine(I18n.T($"\nCompleted! Results saved at: {outputDir}",
+                                         $"\nHoàn tất! Kết quả đã lưu tại: {outputDir}"));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"✗ Đã xảy ra lỗi: {ex.Message}");
-                Console.WriteLine($"Chi tiết: {ex.StackTrace}");
+                Console.WriteLine(I18n.T($"✗ An error occurred: {ex.Message}",
+                                         $"✗ Đã xảy ra lỗi: {ex.Message}"));
+                Console.WriteLine(I18n.T($"Details: {ex.StackTrace}",
+                                         $"Chi tiết: {ex.StackTrace}"));
             }
         }
     }

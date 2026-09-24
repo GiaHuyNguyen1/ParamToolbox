@@ -1,73 +1,78 @@
-# 📋 CẨM NANG HƯỚNG DẪN SỬ DỤNG DÀNH CHO QA / QC TESTER
+# 📋 QA & QC TESTER USER GUIDE - PARAMTOOLBOX
 
-Tài liệu này dành riêng cho các bạn Tester/QA/BA để kiểm tra, xuất dữ liệu và thẩm định tham số cấu hình mà **hoàn toàn không cần biết lập trình hay cài đặt môi trường phức tạp**.
+🌐 Language: **English** | [Tiếng Việt](GUIDE_FOR_QA.vi.md)
+
+This handbook is designed specifically for QA / QC / BA team members to inspect, consolidate, and audit configuration templates without needing any programming knowledge or runtime installation.
 
 ---
 
-## 🚀 1. Tải và Khởi động Tool (Trong 1 phút)
+## 🚀 1. Download & Launch (Takes Under 1 Minute)
 
-### Bước 1: Tải bộ cài đặt phù hợp với máy của bạn
-Truy cập vào mục **Releases** trên GitHub của dự án và tải file `.zip` tương ứng:
-- Máy tính **Windows**: Tải file `ParamToolbox_Win64.zip`
-- Máy Mac chip **Apple Silicon (M1/M2/M3/M4)**: Tải file `ParamToolbox_MacArm64.zip`
-- Máy Mac chip **Intel**: Tải file `ParamToolbox_MacX64.zip`
+### Step 1: Download the Package for Your OS
+Go to the [GitHub Releases](https://github.com/GiaHuyNguyen1/ParamToolbox/releases) page and download the ZIP file for your machine:
+- **Windows PC**: Download `ParamToolbox_Win64.zip`
+- **Mac with Apple Silicon (M1/M2/M3/M4 chip)**: Download `ParamToolbox_MacArm64.zip`
+- **Mac with Intel chip**: Download `ParamToolbox_MacX64.zip`
 
-### Bước 2: Giải nén và Chạy
-- **Trên Windows:**
-  1. Giải nén file `.zip`.
-  2. Click đúp vào file **`Run_Tool.bat`** (hoặc `ParamToolbox.exe`). Cửa sổ công cụ màu đen sẽ hiện ra.
-- **Trên macOS:**
-  1. Giải nén file `.zip`.
-  2. Click đúp vào file **`Run_Tool.command`**.
-  3. *(Nếu Mac báo file không mở được do bảo mật)*: Mở Terminal, gõ `xattr -d com.apple.quarantine ` rồi kéo file `ParamToolbox` vào nhấn Enter. Sau đó mở lại bình thường.
+### Step 2: Extract & Run
+- **On Windows:**
+  1. Extract the `.zip` file.
+  2. Double-click **`Run_Tool.bat`** (or `ParamToolbox.exe`). The command window will open.
+- **On macOS:**
+  1. Extract the `.zip` file.
+  2. Double-click **`Run_Tool.command`**.
+  3. *(If macOS displays a security prompt preventing launch)*: Open Terminal, type `xattr -d com.apple.quarantine ` (with a trailing space), drag the `ParamToolbox` file into the Terminal window, and press Enter. Then run the tool normally.
 
 > [!TIP]
-> **Mẹo kéo thả (Drag & Drop):** Khi tool yêu cầu nhập đường dẫn thư mục hoặc file, bạn **chỉ cần kéo và thả (drag & drop)** thư mục đó từ màn hình máy tính vào thẳng cửa sổ dòng lệnh rồi nhấn **Enter**. Không cần phải gõ tay đường dẫn!
+> **Drag & Drop Paths:** When prompted for file or folder paths, you **do not need to type paths manually**. Simply drag and drop the folder or file from Finder or File Explorer directly into the Terminal window and press **Enter**. Quotes are automatically handled.
+
+> [!NOTE]
+> **Language Toggle:** The tool defaults to **English**. If you prefer Vietnamese, simply press **`9`** on the main menu to toggle languages at any time.
 
 ---
 
-## 🎯 2. Các Tính năng QA thường dùng nhất
+## 🎯 2. Primary Features for QA / Testers
 
-### 🌟 Tính năng 2: Tổng hợp XML và JSON xuất ra file CSV
-- **Khi nào dùng:** Khi cần kiểm tra ma trận tham số cấu hình giữa các Merchant, đối chiếu xem tham số nào có giá trị mặc định, tham số nào là dạng Password (`P`) hay Text (`T`).
-- **Cách thao tác:**
-  1. Tại Menu chính, gõ số **`2`** rồi nhấn Enter.
-  2. **Thư mục XML:** Kéo thả folder chứa các file XML template (ví dụ `Samples/XMLs`).
-  3. **Thư mục JSON:** Kéo thả folder chứa các file JSON cấu hình (ví dụ `Samples/JSONs`).
-  4. **Tên file xuất CSV:** Gõ tên file muốn lưu (ví dụ: `Desktop/KiemTra_Merchant.csv`) hoặc bấm Enter để tool tự lưu ra Desktop.
-  5. **Số lượng Merchant:** Nhập số lượng Merchant cần kiểm tra (ví dụ: `6`), bấm Enter.
-- **Kết quả:** Mở file `.csv` bằng Excel để lọc và đối chiếu số liệu.
-
----
-
-### 🌟 Tính năng 5: Xuất toàn bộ Metadata XML ra file Excel (.xlsx)
-- **Khi nào dùng:** Khi cần xem cấu trúc phân cấp chi tiết nhất của template XML (GroupID, Title, DisplayStyle, DataType, Readonly, Required, InputType...).
-- **Cách thao tác:**
-  1. Tại Menu chính, gõ số **`5`** rồi nhấn Enter.
-  2. **Thư mục template XML:** Kéo thả folder chứa các file XML.
-  3. **Đường dẫn file Excel xuất ra:** Nhập đường dẫn (ví dụ: `Desktop/Template_Metadata.xlsx`).
-- **Kết quả:** Tool xuất ra 1 file Excel chuẩn hóa:
-  - Dòng tiêu đề có màu xanh dương chuyên nghiệp, chữ trắng in đậm.
-  - Đã bật sẵn **Auto-Filter** trên tất cả các cột để bạn dễ dàng lọc theo từng Group hoặc DataType.
-  - Đã cố định dòng tiêu đề (Freeze Pane) để khi cuộn hàng trăm tham số vẫn thấy tên cột.
+### 🌟 Feature 2: Consolidate XML & JSON into a CSV Matrix
+- **When to use:** When auditing parameters across multiple merchants, checking default values, and distinguishing Text (`T`) vs Password (`P`) fields.
+- **How to use:**
+  1. From the main menu, press **`2`** and hit Enter.
+  2. **XML folder:** Drag & drop the directory containing template XML files (e.g. `Samples/XMLs`).
+  3. **JSON folder:** Drag & drop the directory containing configuration JSON files (e.g. `Samples/JSONs`).
+  4. **Output CSV file:** Enter a destination path (e.g. `Desktop/Merchant_Audit.csv`) or press Enter to save to Desktop automatically.
+  5. **Merchant count:** Enter the number of merchants to consolidate (e.g. `6`) and hit Enter.
+- **Result:** Open the generated `.csv` in Excel to filter, inspect, and verify parameter consistency.
 
 ---
 
-### 🌟 Tính năng 3: Nhân bản Merchant Template XML phục vụ Test tải/Test nhiều Merchant
-- **Khi nào dùng:** Khi cần tạo ra hàng loạt template Merchant mẫu (`merchant_1` đến `merchant_30`) để nạp vào hệ thống kiểm thử tự động.
-- **Cách thao tác:**
-  1. Gõ số **`3`**, bấm Enter.
-  2. Kéo thả file XML mẫu (ví dụ: `SingleApp_merchant_1.xml`).
-  3. Nhập thư mục xuất và tổng số lượng cần tạo (ví dụ: `30`).
-- **Kết quả:** Tool tự động tăng tiến các ID và đóng gói sẵn thành các file `.zip` (mỗi file 10 template).
+### 🌟 Feature 5: Export XML Metadata to Styled Excel (.xlsx)
+- **When to use:** When you need a comprehensive, hierarchical breakdown of all template attributes (GroupID, GroupTitle, DisplayStyle, DataType, Readonly, Required, InputType, etc.).
+- **How to use:**
+  1. From the main menu, press **`5`** and hit Enter.
+  2. **XML folder:** Drag & drop the folder containing your template XML files.
+  3. **Output Excel file:** Specify the destination path (e.g. `Desktop/Template_Metadata.xlsx`).
+- **Result:** Generates an Excel spreadsheet with:
+  - Clean navy blue headers with bold white text.
+  - Pre-activated **Auto-Filter** on all columns for filtering by Group or DataType.
+  - **Freeze Panes** on the header row so column names stay visible while scrolling large datasets.
 
 ---
 
-## ❓ 3. Các lỗi thường gặp và cách xử lý (Troubleshooting)
+### 🌟 Feature 3: Clone Merchant XML Templates for Test Automation
+- **When to use:** When preparing test fixtures for load or multi-merchant testing (generating `merchant_1.xml` through `merchant_30.xml`).
+- **How to use:**
+  1. Press **`3`** and hit Enter.
+  2. Drag & drop the base merchant template file (e.g. `SingleApp_merchant_1.xml`).
+  3. Enter output directory and total quantity to generate (e.g. `30`).
+- **Result:** Automatically increments group IDs, field IDs, and PIDs, packaging them into neat ZIP batches (10 files per zip).
 
-| Lỗi | Nguyên nhân | Cách xử lý |
+---
+
+## ❓ 3. Troubleshooting & FAQs
+
+| Issue | Cause | Solution |
 | :--- | :--- | :--- |
-| **"Folder không tồn tại"** | Đường dẫn gõ sai hoặc thư mục đã bị xóa/đổi tên. | Hãy sử dụng thao tác **kéo thả** folder vào cửa sổ terminal để đảm bảo đường dẫn chính xác 100%. |
-| **Không tìm thấy file XML nào** | Thư mục chọn không chứa file `.xml` hoặc các file bắt đầu bằng dấu chấm `.` (file ẩn). | Kiểm tra lại xem folder đã giải nén chưa và file có đuôi `.xml` hay không. |
-| **Font chữ tiếng Việt trong CSV bị lỗi khi mở bằng Excel** | Excel chưa nhận diện UTF-8. | Tool đã tích hợp sẵn chuẩn UTF-8 có BOM. Nếu máy bạn bị lỗi font, hãy mở Excel -> vào tab **Data** -> chọn **From Text/CSV** và chọn File Origin là **UTF-8**. |
-| **Cửa sổ tắt ngay khi bấm đúp** | Thiếu quyền thực thi trên macOS. | Chạy lệnh `chmod +x ParamToolbox Run_Tool.command` trong Terminal. |
+| **"Error: Folder does not exist!"** | Path was mistyped or directory moved. | Use **drag & drop** directly from Finder/Explorer into Terminal. |
+| **"No valid XML files found"** | Directory has no `.xml` files or only hidden files (starting with `.`). | Verify that the folder contains unhidden `.xml` files. |
+| **Vietnamese characters garbled in CSV** | Excel opened CSV without UTF-8 recognition. | The tool writes UTF-8 with BOM. If your Excel version fails to detect it, open Excel -> **Data** tab -> **From Text/CSV** and select **UTF-8** encoding. |
+| **Window closes immediately on Mac** | Execution permission missing. | Run `chmod +x ParamToolbox Run_Tool.command` in Terminal. |

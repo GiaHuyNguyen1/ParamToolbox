@@ -1,117 +1,116 @@
 # 🧰 ParamToolbox - Parameter & Template Management Suite
 
-Bộ công cụ dòng lệnh (CLI) hỗ trợ quản lý cấu hình tham số, chuyển đổi dữ liệu XML/JSON, nhân bản template Merchant, sinh mã C# Model Binding và xuất báo cáo Excel chuyên nghiệp.
+🌐 Language: **English** | [Tiếng Việt](README.vi.md)
 
-> 📌 **Điều hướng nhanh theo vai trò:**
-> - 🧪 **[Cẩm nang dành riêng cho QA / QC Tester](GUIDE_FOR_QA.md)**: Cách tải file, chạy không cần cài .NET, mẹo kéo thả thư mục và xuất báo cáo.
-> - 🛠️ **[Tài liệu dành riêng cho Developer](GUIDE_FOR_DEV.md)**: Thiết lập IDE, cấu trúc code, cách debug và hướng dẫn thêm Feature mới.
-> - 📘 **[Đặc tả Kỹ thuật chi tiết (SPECS)](SPECS.md)**: Chi tiết thuật toán bóc tách dữ liệu, mapping PID và schema XML/JSON.
+A cross-platform Command-Line Interface (CLI) suite designed to manage parameter configurations, convert XML/JSON schemas, clone Merchant templates, generate C# model bindings, and export structured Excel metadata reports.
+
+> 📌 **Quick Navigation by Role:**
+> - 🧪 **[QA / QC Tester Guide](GUIDE_FOR_QA.md)**: How to download, run without installing .NET, drag & drop shortcuts, and audit configurations.
+> - 🛠️ **[Developer Guide](GUIDE_FOR_DEV.md)**: IDE setup, solution structure, debugging, coding standards, and adding new features.
+> - 📘 **[Technical Specifications (SPECS)](SPECS.md)**: Deep dive into parsing algorithms, PID mappings, and XML/JSON data contracts.
 
 ---
 
-## ⚡ Hướng dẫn sử dụng nhanh (Dành cho Người Dùng / QC / BA)
+## ⚡ Quick Start for End-Users / QA / BA
 
-Không cần cài đặt .NET SDK hay bất kỳ môi trường lập trình nào.
+No .NET SDK or programming setup is required.
 
-### 1. Tải về gói thực thi (Portable):
-- **Windows (64-bit):** Giải nén `ParamToolbox_Win64.zip`
-- **macOS Apple Silicon (M1/M2/M3/M4):** Giải nén `ParamToolbox_MacArm64.zip`
-- **macOS Intel:** Giải nén `ParamToolbox_MacX64.zip`
+### 1. Download the Portable Package:
+From the [GitHub Releases](https://github.com/GiaHuyNguyen1/ParamToolbox/releases) page, download the zip matching your operating system:
+- **Windows (64-bit):** `ParamToolbox_Win64.zip`
+- **macOS Apple Silicon (M1/M2/M3/M4):** `ParamToolbox_MacArm64.zip`
+- **macOS Intel:** `ParamToolbox_MacX64.zip`
 
-### 2. Cách chạy:
-- **Trên Windows:** Click đúp vào file `Run_Tool.bat` (hoặc chạy trực tiếp `ParamToolbox.exe`).
-- **Trên macOS:**
-  1. Click đúp vào file `Run_Tool.command`.
-  2. *Lưu ý (nếu macOS cảnh báo bảo mật lần đầu mở):*
-     Mở Terminal tại thư mục đã giải nén và chạy lệnh:
+### 2. Run the Tool:
+- **On Windows:** Extract the zip and double-click **`Run_Tool.bat`** (or execute `ParamToolbox.exe`).
+- **On macOS:**
+  1. Extract the zip and double-click **`Run_Tool.command`**.
+  2. *Note (if macOS displays a security prompt on first launch):*
+     Open Terminal in the extracted folder and run:
      ```bash
      chmod +x ParamToolbox Run_Tool.command
      xattr -d com.apple.quarantine ParamToolbox 2>/dev/null || true
      ```
 
 > [!TIP]
-> Khi tool yêu cầu nhập đường dẫn file hoặc thư mục, bạn chỉ cần **kéo và thả (drag & drop)** file/folder trực tiếp từ Finder hoặc File Explorer vào cửa sổ dòng lệnh và nhấn **Enter**.
+> **Drag & Drop Paths:** When prompted for file or directory paths, simply **drag and drop** the file or folder directly from File Explorer or Finder into the Terminal window and press **Enter**.
 
 ---
 
-## 💻 Hướng dẫn cho Lập trình viên (Developer Guide)
+## 💻 Developer Guide
 
-### 1. Yêu cầu môi trường
-- Cài đặt **.NET SDK 10.0** (hoặc **.NET SDK 8.0 LTS**).
-- IDE khuyên dùng: Visual Studio 2022 / 2025, JetBrains Rider, hoặc VS Code (kèm C# Dev Kit).
+### 1. Requirements
+- **.NET SDK 10.0** (or **.NET SDK 8.0 LTS**).
+- Recommended IDE: Visual Studio 2022/2025, JetBrains Rider, or VS Code (with C# Dev Kit).
 
-### 2. Chạy ứng dụng từ mã nguồn
+### 2. Clone & Run from Source
 ```bash
-# Di chuyển vào thư mục ParamToolbox
+# Clone the repository
+git clone https://github.com/GiaHuyNguyen1/ParamToolbox.git
 cd ParamToolbox
 
-# Khôi phục dependencies và chạy
+# Restore dependencies and run
 dotnet run
 ```
 
-*(Nếu máy bạn chỉ cài .NET 8, bạn có thể sửa thẻ `<TargetFramework>net10.0</TargetFramework>` trong file `ParamToolbox.csproj` thành `net8.0` là có thể chạy bình thường).*
+*(If you only have .NET 8 SDK installed, you can simply change `<TargetFramework>net10.0</TargetFramework>` in `ParamToolbox.csproj` to `net8.0`).*
 
-### 3. Dữ liệu thử nghiệm (Samples)
-Dự án có sẵn thư mục `Samples/` để test ngay các tính năng:
-- `Samples/XMLs/`: Chứa template XML mẫu (`SingleApp_merchant_1.xml`, `SingleApp_system.xml`, `SingleApp_cashiers.xml`...).
-- `Samples/JSONs/`: Chứa các file JSON cấu hình mẫu tương ứng.
+### 3. Sample Datasets
+The project includes a ready-to-test `Samples/` directory:
+- `Samples/XMLs/`: Sample XML templates (`SingleApp_merchant_1.xml`, `SingleApp_system.xml`, `SingleApp_cashiers.xml`...).
+- `Samples/JSONs/`: Corresponding configuration JSON files.
 
 ---
 
-## 📋 Danh mục tính năng (Feature Menu)
+## 📋 Feature Menu
 
-Khi khởi động, màn hình menu sẽ hiển thị 5 tính năng:
+When launched, the interactive CLI displays the menu:
 
 ```text
-=== PARAM TOOLBOX ===
-1. Khởi tạo file JSON mặc định từ thẻ <Parameter> của XML (Feature 1)
-2. Tổng hợp XML và JSON xuất ra CSV/Excel (Feature 2)
-3. Nhân bản Merchant Template XML ra file ZIP (Feature 3)
-4. Generate C# Binding Code từ danh sách PID (Feature 4)
-5. Xuất Excel đầy đủ thuộc tính từ template XML (Feature 5)
-0. Thoát
+==========================================================
+                   === PARAM TOOLBOX ===                  
+==========================================================
+1. Generate default JSON from XML <Parameter> tags (Feature 1)
+2. Consolidate XML & JSON to CSV/Excel (Feature 2)
+3. Clone Merchant XML Templates to ZIP (Feature 3)
+4. Generate C# Binding Code from PIDs (Feature 4)
+5. Export XML Template Metadata to Excel (Feature 5)
+9. Switch language / Đổi ngôn ngữ (Current: English)
+0. Exit
+----------------------------------------------------------
+Select an option (0-5, 9): 
 ```
 
-| Phím | Tính năng | Mục đích sử dụng |
+| Key | Feature | Description |
 | :---: | :--- | :--- |
-| **`1`** | **XML to JSON Generator** | Đọc các thẻ `<Parameter>` từ XML, sinh file JSON chứa `DefaultValue` và `Type` ("T" hoặc "P"). |
-| **`2`** | **XML & JSON to CSV Consolidation** | Kết hợp cấu trúc từ XML và giá trị cấu hình từ JSON để xuất ma trận tham số ra CSV gửi cho QC/Khách hàng kiểm tra. |
-| **`3`** | **Merchant Template Cloner** | Tự động nhân bản hàng loạt template Merchant (`merchant_1` -> `merchant_N`), tự động tịnh tiến ID nhóm (`sys_G`), ID trường (`sys_F`), PID và đóng gói thành các file `.zip`. |
-| **`4`** | **C# Model Binding Generator** | Nhập danh sách PID cần map, tool tự động sinh mã nguồn C# Properties & Mapping gán giá trị, lưu ra file `GeneratedCode.txt`. |
-| **`5`** | **Template XML Metadata to Excel** | Trích xuất toàn bộ thuộc tính, mô tả, validation, styling từ các file XML và xuất ra file Excel `.xlsx` chuẩn hóa (ClosedXML) có màu sắc và filter. |
+| **`1`** | **XML to JSON Generator** | Parses `<Parameter>` tags from XML and generates `{name}.json` (DefaultValues) and `{name}.type.json` ("T" for Text, "P" for Password). |
+| **`2`** | **XML & JSON to CSV Consolidation** | Combines XML parameter definitions with JSON values to export a unified configuration matrix into CSV for QA auditing. |
+| **`3`** | **Merchant Template Cloner** | Clones merchant templates (`merchant_1` to `merchant_N`), increments group IDs (`sys_G`), field IDs (`sys_F`), and PIDs, packaging them into zipped batches. |
+| **`4`** | **C# Model Binding Generator** | Generates strongly-typed C# property mapping logic from a list of PIDs, saving output to `GeneratedCode.txt`. |
+| **`5`** | **Template XML Metadata to Excel** | Deeply inspects all XML attributes, hierarchy, validation, and styling, exporting a styled `.xlsx` workbook (ClosedXML) with auto-filters and frozen header panes. |
+| **`9`** | **Language Switcher** | Toggles user interface language dynamically between **English** and **Tiếng Việt**. |
+| **`0`** | **Exit** | Closes the application. |
 
 ---
 
-## 📦 Hướng dẫn Tự động Build & Đóng gói (Multi-Platform Publish)
+## 📦 Automated Multi-Platform Packaging
 
-Để tạo ra các bộ cài đặt độc lập (Self-Contained Single-File) cho tất cả các nền tảng:
+To package standalone self-contained single-file binaries without requiring .NET runtime on client machines:
 
-### Cách 1: Sử dụng Script tự động (Khuyến nghị)
-- **Trên macOS / Linux:**
+- **On macOS / Linux:**
   ```bash
   chmod +x build-all.sh
   ./build-all.sh
   ```
-- **Trên Windows:**
-  Chạy file `build-all.bat`
+- **On Windows:**
+  Execute `build-all.bat`
 
-Kết quả các file `.zip` hoàn chỉnh sẽ nằm trong thư mục `dist/`.
-
-### Cách 2: Chạy lệnh `dotnet publish` thủ công
-- **Windows (x64):**
-  ```bash
-  dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishReadyToRun=true -o publish/win-x64
-  ```
-- **macOS Apple Silicon (M-series):**
-  ```bash
-  dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true -p:PublishReadyToRun=true -o publish/osx-arm64
-  ```
-- **macOS Intel (x64):**
-  ```bash
-  dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -p:PublishReadyToRun=true -o publish/osx-x64
-  ```
+Output ZIP archives will be generated in `dist/` for:
+- `ParamToolbox_Win64.zip`
+- `ParamToolbox_MacArm64.zip`
+- `ParamToolbox_MacX64.zip`
 
 ---
 
-## 📖 Đặc tả kỹ thuật chi tiết (Technical Specs)
-Chi tiết về cấu trúc thuật toán, xử lý mapping, schema XML/JSON, và hướng dẫn mở rộng code, xem thêm tại: [SPECS.md](SPECS.md).
+## 📖 Technical Specifications
+For full architectural details, data flow contracts, and XML schema definitions, see [SPECS.md](SPECS.md).

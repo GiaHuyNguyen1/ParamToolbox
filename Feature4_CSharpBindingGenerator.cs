@@ -12,24 +12,29 @@ namespace ParamToolbox
     {
         public static void Execute()
         {
-            Console.WriteLine("=== FEATURE 4: Generate C# Binding Code ===");
+            Console.WriteLine(I18n.T("=== FEATURE 4: Generate C# Binding Code ===",
+                                     "=== FEATURE 4: Generate C# Binding Code ==="));
 
-            Console.Write("Nhập đường dẫn file XML (vd: Samples/XMLs/SingleApp_merchant_1.xml): ");
+            Console.Write(I18n.T("Enter XML file path (e.g. Samples/XMLs/SingleApp_merchant_1.xml): ",
+                                 "Nhập đường dẫn file XML (vd: Samples/XMLs/SingleApp_merchant_1.xml): "));
             string xmlPath = PathHelper.CleanPath(Console.ReadLine());
 
             if (!File.Exists(xmlPath))
             {
-                Console.WriteLine("Lỗi: Không tìm thấy file XML.");
+                Console.WriteLine(I18n.T("Error: XML file not found.",
+                                         "Lỗi: Không tìm thấy file XML."));
                 return;
             }
 
-            Console.WriteLine("Nhập danh sách PID (cách nhau bởi khoảng trắng hoặc xuống dòng).");
-            Console.WriteLine("Nhập 'DONE' hoặc để trống 2 lần liên tiếp để kết thúc:");
+            Console.WriteLine(I18n.T("Enter PID list (separated by space or line breaks).",
+                                     "Nhập danh sách PID (cách nhau bởi khoảng trắng hoặc xuống dòng)."));
+            Console.WriteLine(I18n.T("Type 'DONE' or press Enter twice to finish:",
+                                     "Nhập 'DONE' hoặc để trống 2 lần liên tiếp để kết thúc:"));
             List<string> pids = new List<string>();
             int emptyCount = 0;
             while (true)
             {
-                string line = Console.ReadLine()?.Trim();
+                string line = Console.ReadLine()?.Trim() ?? "";
                 if (line == "DONE") break;
                 if (string.IsNullOrEmpty(line))
                 {
@@ -45,7 +50,8 @@ namespace ParamToolbox
 
             if (pids.Count == 0)
             {
-                Console.WriteLine("Không có PID nào được nhập.");
+                Console.WriteLine(I18n.T("No PIDs entered.",
+                                         "Không có PID nào được nhập."));
                 return;
             }
 
@@ -61,7 +67,7 @@ namespace ParamToolbox
                     var paramElement = parameters.FirstOrDefault(p => p.Element("PID")?.Value == inputPid);
                     if (paramElement == null)
                     {
-                        sb.AppendLine($"// Lỗi: Không tìm thấy PID '{inputPid}' trong XML\n");
+                        sb.AppendLine($"// Error: PID '{inputPid}' not found in XML\n");
                         continue;
                     }
 
@@ -114,17 +120,20 @@ namespace ParamToolbox
                     sb.AppendLine();
                 }
 
-                Console.WriteLine("\n--- KẾT QUẢ CODE GENERATED ---\n");
+                Console.WriteLine(I18n.T("\n--- GENERATED C# BINDING CODE ---\n",
+                                         "\n--- KẾT QUẢ CODE GENERATED ---\n"));
                 string generatedCode = sb.ToString();
                 Console.WriteLine(generatedCode);
 
                 string outPath = "GeneratedCode.txt";
                 File.WriteAllText(outPath, generatedCode);
-                Console.WriteLine($"[Đã lưu kết quả vào file: {Path.GetFullPath(outPath)}]");
+                Console.WriteLine(I18n.T($"[Results saved to file: {Path.GetFullPath(outPath)}]",
+                                         $"[Đã lưu kết quả vào file: {Path.GetFullPath(outPath)}]"));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi xử lý: {ex.Message}");
+                Console.WriteLine(I18n.T($"Processing error: {ex.Message}",
+                                         $"Lỗi xử lý: {ex.Message}"));
             }
         }
     }

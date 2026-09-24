@@ -76,17 +76,21 @@ namespace ParamToolbox
 
         public static void Execute()
         {
-            Console.WriteLine("=== FEATURE 5: Template XML Metadata to Excel ===");
+            Console.WriteLine(I18n.T("=== FEATURE 5: Template XML Metadata to Excel ===",
+                                     "=== FEATURE 5: Template XML Metadata to Excel ==="));
 
-            Console.Write("Nhập đường dẫn thư mục chứa file template XML: ");
+            Console.Write(I18n.T("Enter XML template directory path: ",
+                                 "Nhập đường dẫn thư mục chứa file template XML: "));
             string xmlFolderPath = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write("Nhập đường dẫn và tên file Excel xuất ra (vd: .../template-metadata.xlsx): ");
+            Console.Write(I18n.T("Enter output Excel file path (e.g. .../template-metadata.xlsx): ",
+                                 "Nhập đường dẫn và tên file Excel xuất ra (vd: .../template-metadata.xlsx): "));
             string excelPath = PathHelper.CleanPath(Console.ReadLine());
 
             if (!Directory.Exists(xmlFolderPath))
             {
-                Console.WriteLine("Lỗi: Thư mục XML không tồn tại!");
+                Console.WriteLine(I18n.T("Error: XML directory does not exist!",
+                                         "Lỗi: Thư mục XML không tồn tại!"));
                 return;
             }
 
@@ -96,7 +100,8 @@ namespace ParamToolbox
                 excelPath = Path.Combine(
                     Directory.Exists(excelPath) ? excelPath : Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "template-metadata.xlsx");
-                Console.WriteLine($"Sẽ lưu file Excel tại: {excelPath}");
+                Console.WriteLine(I18n.T($"Will save Excel file at: {excelPath}",
+                                         $"Sẽ lưu file Excel tại: {excelPath}"));
             }
 
             var xmlFiles = Directory.GetFiles(xmlFolderPath, "*.xml", SearchOption.TopDirectoryOnly)
@@ -107,7 +112,8 @@ namespace ParamToolbox
 
             if (xmlFiles.Count == 0)
             {
-                Console.WriteLine("Không tìm thấy file XML hợp lệ trong thư mục.");
+                Console.WriteLine(I18n.T("No valid XML files found in the directory.",
+                                         "Không tìm thấy file XML hợp lệ trong thư mục."));
                 return;
             }
 
@@ -122,11 +128,13 @@ namespace ParamToolbox
                 }
 
                 CreateExcelFile(excelPath, rows, parameterColumns);
-                Console.WriteLine($"\nHoàn thành! Đã tạo file Excel với {rows.Count} dòng dữ liệu.");
+                Console.WriteLine(I18n.T($"\nCompleted! Generated Excel file with {rows.Count} rows of data.",
+                                         $"\nHoàn thành! Đã tạo file Excel với {rows.Count} dòng dữ liệu."));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi khi xuất Excel metadata: {ex.Message}");
+                Console.WriteLine(I18n.T($"Error exporting Excel metadata: {ex.Message}",
+                                         $"Lỗi khi xuất Excel metadata: {ex.Message}"));
             }
         }
 

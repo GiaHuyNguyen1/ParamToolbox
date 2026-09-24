@@ -1,34 +1,36 @@
-# 🛠️ HƯỚNG DẪN DÀNH CHO LẬP TRÌNH VIÊN (DEVELOPER CONTRIBUTION GUIDE)
+# 🛠️ DEVELOPER CONTRIBUTION GUIDE - PARAMTOOLBOX
 
-Tài liệu này cung cấp toàn bộ quy trình thiết lập môi trường, quy chuẩn mã nguồn, cách gỡ lỗi (debug), thêm tính năng mới và đóng gói dự án **ParamToolbox**.
+🌐 Language: **English** | [Tiếng Việt](GUIDE_FOR_DEV.vi.md)
+
+This document provides complete instructions for developers on environment setup, coding conventions, debugging, adding new features, and packaging **ParamToolbox**.
 
 ---
 
-## 💻 1. Môi trường phát triển (Prerequisites)
+## 💻 1. Development Prerequisites
 
-- **SDK:** Cài đặt **.NET 8.0 SDK (LTS)** hoặc **.NET 10.0 SDK**.
-  - Kiểm tra bằng lệnh: `dotnet --list-sdks`
-  - *Mặc định project để `<TargetFramework>net10.0</TargetFramework>`, nhưng hoàn toàn tương thích và có thể đổi sang `net8.0` nếu môi trường máy bạn chỉ có .NET 8.*
-- **IDE đề xuất:**
+- **SDK:** Install **.NET 8.0 SDK (LTS)** or **.NET 10.0 SDK**.
+  - Check your installed SDKs: `dotnet --list-sdks`
+  - *By default the project targets `<TargetFramework>net10.0</TargetFramework>`, but it is fully backwards-compatible with `net8.0` if your environment uses .NET 8.*
+- **Recommended IDEs:**
+  - **JetBrains Rider** (Recommended across macOS and Windows)
   - **Visual Studio 2022 / 2025** (Windows / macOS)
-  - **JetBrains Rider** (Khuyên dùng trên cả macOS & Windows)
-  - **Visual Studio Code** (Cài extension `C# Dev Kit` và `.NET Install Tool`)
+  - **Visual Studio Code** (with `C# Dev Kit` and `.NET Install Tool` extensions)
 
 ---
 
-## 🚀 2. Khởi chạy và Debug mã nguồn
+## 🚀 2. Getting Started & Debugging
 
-### Bước 1: Mở Solution
-Mở trực tiếp file solution độc lập:
+### Step 1: Open the Solution
+Open the standalone solution file directly:
 ```bash
-# Mở solution bằng VS Code
+# Open in VS Code
 code ParamToolbox/ParamToolbox.sln
 
-# Hoặc mở bằng Rider / Visual Studio
+# Or open in Rider / Visual Studio
 open ParamToolbox/ParamToolbox.sln
 ```
 
-### Bước 2: Chạy trực tiếp từ dòng lệnh
+### Step 2: Run from Command Line
 ```bash
 cd ParamToolbox
 dotnet restore
@@ -37,27 +39,30 @@ dotnet run
 
 ---
 
-## 🏛️ 3. Kiến trúc dự án & Quy chuẩn lập trình (Architecture & Standards)
+## 🏛️ 3. Architecture & Coding Standards
 
-### Kiến trúc phân rã theo Tính năng (Feature-based Modular Design)
-Mỗi tính năng trong menu CLI được đóng gói độc lập trong một file `static class`:
-- `Program.cs`: Chỉ quản lý vòng lặp Menu chính và điều hướng người dùng.
-- `PathHelper.cs`: Hàm tiện ích chuẩn hóa chuỗi đường dẫn (xóa bỏ dấu nháy kép `"`, nháy đơn `'` do thao tác kéo thả).
-- `Feature1_JsonGenerator.cs` -> `Feature5_TemplateMetadataCsvExporter.cs`: Các module nghiệp vụ riêng biệt.
+### Feature-Based Modular Architecture
+Each CLI option is decoupled into an isolated `static class`:
+- `Program.cs`: Entry point, main menu loop, and routing.
+- `I18n.cs`: Bilingual internationalization helper (defaults to English, toggles to Vietnamese).
+- `PathHelper.cs`: Input sanitizer stripping quotes (`"` and `'`) from drag-and-drop paths.
+- `Feature1_JsonGenerator.cs` through `Feature5_TemplateMetadataCsvExporter.cs`: Business modules.
 
-### Quy chuẩn khi viết code:
-1. **Không dùng đường dẫn tuyệt đối (Absolute Path):** Luôn dùng `Path.Combine()` và đường dẫn tương đối.
-2. **Luôn dùng `PathHelper.CleanPath()`:** Khi nhận chuỗi từ `Console.ReadLine()`, luôn bọc qua `PathHelper.CleanPath(...)` để tránh crash khi người dùng kéo thả thư mục vào Terminal.
-3. **Bắt ngoại lệ cục bộ (Fault-tolerant):** Mỗi tác vụ duyệt file phải bọc `try...catch` theo từng file riêng lẻ. Một file hỏng không được làm sập cả tiến trình.
-4. **Encoding chuẩn:** Ghi file CSV hoặc Text với `Encoding.UTF8` (có BOM) để Excel hiển thị đúng dấu tiếng Việt.
+### Standards to Follow:
+1. **No Hardcoded Absolute Paths:** Always use relative paths or `Path.Combine()`.
+2. **Always Use `PathHelper.CleanPath()`:** Wrap every `Console.ReadLine()` path input with `PathHelper.CleanPath(...)` to prevent crashes when users drag & drop files.
+3. **Use `I18n.T()` for Console Strings:** Provide both English and Vietnamese text:
+   ```csharp
+   Console.WriteLine(I18n.T("English message", "Thông báo tiếng Việt"));
+   ```
+4. **Per-File Exception Handling:** Wrap iterations in `try...catch` per file so a single corrupt template does not terminate batch processes.
+5. **Standard Encoding:** Emit text/CSV with `Encoding.UTF8` (BOM enabled) to ensure Excel displays international and accented characters properly.
 
 ---
 
-## ➕ 4. Hướng dẫn thêm một Tính năng mới (Ví dụ: Feature 6)
+## ➕ 4. How to Add a New Feature (Example: Feature 6)
 
-Để thêm một tính năng mới (ví dụ: `Feature6_ValidateXmlSchema`):
-
-### Bước 1: Tạo file class mới `Feature6_ValidateXmlSchema.cs`
+### Step 1: Create `Feature6_ValidateXmlSchema.cs`
 ```csharp
 using System;
 using System.IO;
@@ -68,29 +73,35 @@ namespace ParamToolbox
     {
         public static void Execute()
         {
-            Console.WriteLine("=== FEATURE 6: Validate XML Schema ===");
-            Console.Write("Nhập đường dẫn file/folder cần kiểm tra: ");
+            Console.WriteLine(I18n.T("=== FEATURE 6: Validate XML Schema ===",
+                                     "=== FEATURE 6: Kiểm tra XML Schema ==="));
+
+            Console.Write(I18n.T("Enter file/folder path to validate: ",
+                                 "Nhập đường dẫn file/folder cần kiểm tra: "));
             string targetPath = PathHelper.CleanPath(Console.ReadLine());
 
             if (!File.Exists(targetPath) && !Directory.Exists(targetPath))
             {
-                Console.WriteLine("Lỗi: Đường dẫn không tồn tại!");
+                Console.WriteLine(I18n.T("Error: Path does not exist!",
+                                         "Lỗi: Đường dẫn không tồn tại!"));
                 return;
             }
 
-            // Triển khai logic nghiệp vụ tại đây...
-            Console.WriteLine("Hoàn tất xử lý Feature 6!");
+            // Implement your validation logic here...
+            Console.WriteLine(I18n.T("Feature 6 completed!",
+                                     "Hoàn tất xử lý Feature 6!"));
         }
     }
 }
 ```
 
-### Bước 2: Đăng ký vào Menu trong `Program.cs`
-1. Thêm dòng in menu:
+### Step 2: Register in `Program.cs`
+1. Add a menu line:
    ```csharp
-   Console.WriteLine("6. Kiểm tra hợp lệ cấu trúc XML Schema (Feature 6)");
+   Console.WriteLine(I18n.T("6. Validate XML Schema (Feature 6)",
+                            "6. Kiểm tra hợp lệ XML Schema (Feature 6)"));
    ```
-2. Thêm nhánh xử lý trong `switch (choice)`:
+2. Add a `switch-case` branch:
    ```csharp
    case "6":
        Console.Clear();
@@ -100,27 +111,27 @@ namespace ParamToolbox
 
 ---
 
-## 📦 5. Quy trình Đóng gói phát hành (Build & Publish)
+## 📦 5. Automated Multi-Platform Packaging
 
-Dự án hỗ trợ đóng gói độc lập không phụ thuộc môi trường (.NET Runtime) bằng 2 script tự động:
+The repository provides one-click build scripts that compile **Self-Contained Single-File** executables:
 
-- **Trên macOS / Linux:**
+- **On macOS / Linux:**
   ```bash
   chmod +x build-all.sh
   ./build-all.sh
   ```
-- **Trên Windows:**
+- **On Windows:**
   ```cmd
   build-all.bat
   ```
 
-Toàn bộ gói nén cho 3 nền tảng (`ParamToolbox_Win64.zip`, `ParamToolbox_MacArm64.zip`, `ParamToolbox_MacX64.zip`) sẽ được tạo tự động trong thư mục `dist/`.
+Output ZIP archives will be created in `dist/` containing ready-to-use binaries and launchers (`Run_Tool.bat` / `Run_Tool.command`).
 
 ---
 
-## 🛡️ 6. Checklist trước khi tạo Pull Request / Push lên Git
+## 🛡️ 6. Pre-Commit Checklist
 
-- [ ] Chạy `dot_clean .` (nếu dùng macOS) để xóa sạch các file rác `._*`.
-- [ ] Không commit các thư mục `bin/`, `obj/`, `publish/`, `dist/` hoặc các file `.zip`.
-- [ ] Kiểm tra các file trong `Samples/` không chứa dữ liệu bí mật (mật khẩu thật, token nội bộ công ty).
-- [ ] Biên dịch thử nghiệm thành công với cả `dotnet build` và `./build-all.sh`.
+- [ ] Run `dot_clean .` on macOS to purge AppleDouble metadata (`._*`).
+- [ ] Ensure `bin/`, `obj/`, `publish/`, `dist/`, or `.zip` files are not staged for commit.
+- [ ] Verify sample files in `Samples/` do not contain private tokens, internal credentials, or sensitive data.
+- [ ] Verify both `dotnet build` and `./build-all.sh` succeed without errors.
