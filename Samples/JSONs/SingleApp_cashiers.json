@@ -1,0 +1,22 @@
+{
+  "string.name1": "#{cashier_1_string_name}",
+  "bool.enabled1": "#{cashier_1_bool_enabled}",
+  "uint.cashierId1": "#{cashier_1_uint_cashierId}",
+  "bool.passwordRequired1": "#{cashier_1_bool_passwordRequired}",
+  "string.password1": "#{cashier_1_string_password}",
+  "string.name2": "#{cashier_2_string_name}",
+  "bool.enabled2": "#{cashier_2_bool_enabled}",
+  "uint.cashierId2": "#{cashier_2_uint_cashierId}",
+  "bool.passwordRequired2": "#{cashier_2_bool_passwordRequired}",
+  "string.password2": "#{cashier_2_string_password}",
+  "string.name3": "#{cashier_3_string_name}",
+  "bool.enabled3": "#{cashier_3_bool_enabled}",
+  "uint.cashierId3": "#{cashier_3_uint_cashierId}",
+  "bool.passwordRequired3": "#{cashier_3_bool_passwordRequired}",
+  "string.password3": "#{cashier_3_string_password}",
+  "string.name4": "#{cashier_4_string_name}",
+  "bool.enabled4": "#{cashier_4_bool_enabled}",
+  "uint.cashierId4": "#{cashier_4_uint_cashierId}",
+  "bool.passwordRequired4": "#{cashier_4_bool_passwordRequired}",
+  "string.password4": "#{cashier_4_string_password}"
+}

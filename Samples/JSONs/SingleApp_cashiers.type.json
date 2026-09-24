@@ -1,0 +1,22 @@
+{
+  "string.name1": "T",
+  "bool.enabled1": "T",
+  "uint.cashierId1": "T",
+  "bool.passwordRequired1": "T",
+  "string.password1": "P",
+  "string.name2": "T",
+  "bool.enabled2": "T",
+  "uint.cashierId2": "T",
+  "bool.passwordRequired2": "T",
+  "string.password2": "P",
+  "string.name3": "T",
+  "bool.enabled3": "T",
+  "uint.cashierId3": "T",
+  "bool.passwordRequired3": "T",
+  "string.password3": "P",
+  "string.name4": "T",
+  "bool.enabled4": "T",
+  "uint.cashierId4": "T",
+  "bool.passwordRequired4": "T",
+  "string.password4": "P"
+}

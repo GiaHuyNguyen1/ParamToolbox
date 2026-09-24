@@ -1,0 +1,30 @@
+# .NET Build Folders
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio / Rider / VSCode
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+.vscode/
+
+# Build & Publish Outputs
+publish/
+[Pp]ublish/
+dist/
+*.zip
+
+# Generated Outputs & Scratch
+GeneratedCode.txt
+output.csv
+*.xlsx
+*.log
+
+# macOS Metadata
+._*
+.DS_Store
+.AppleDouble
+.LSOverride

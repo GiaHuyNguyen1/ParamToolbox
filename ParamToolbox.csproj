@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Can be changed to net8.0 if targeting older LTS environments -->
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyTitle>ParamToolbox</AssemblyTitle>
+    <Product>ParamToolbox - Parameter &amp; Template Management Tool</Product>
+    <Version>1.0.0</Version>
+    <Description>Multi-purpose CLI tool for XML/JSON parameter conversions, template cloning, C# code binding generation, and Excel metadata exports.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude macOS AppleDouble metadata files (._*) from compilation -->
+    <Compile Remove="._*" />
+  </ItemGroup>
+
+</Project>
