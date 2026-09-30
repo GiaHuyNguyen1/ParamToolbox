@@ -50,7 +50,7 @@ Go to the [GitHub Releases](https://github.com/GiaHuyNguyen1/ParamToolbox/releas
 - **How to use:**
   1. From the main menu, press **`5`** and hit Enter.
   2. **XML folder:** Drag & drop the folder containing your template XML files.
-  3. **Output Excel file:** Specify the destination path (e.g. `Desktop/Template_Metadata.xlsx`).
+  3. **Output Excel file:** Specify the destination path (e.g. `Desktop/template-parameter-metadata.xlsx`).
 - **Result:** Generates an Excel spreadsheet with:
   - Clean navy blue headers with bold white text.
   - Pre-activated **Auto-Filter** on all columns for filtering by Group or DataType.

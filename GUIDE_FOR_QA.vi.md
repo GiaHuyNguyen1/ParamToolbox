@@ -45,7 +45,7 @@ Truy cập vào mục **Releases** trên GitHub của dự án và tải file `.
 - **Cách thao tác:**
   1. Tại Menu chính, gõ số **`5`** rồi nhấn Enter.
   2. **Thư mục template XML:** Kéo thả folder chứa các file XML.
-  3. **Đường dẫn file Excel xuất ra:** Nhập đường dẫn (ví dụ: `Desktop/Template_Metadata.xlsx`).
+  3. **Đường dẫn file Excel xuất ra:** Nhập đường dẫn (ví dụ: `Desktop/template-parameter-metadata.xlsx`).
 - **Kết quả:** Tool xuất ra 1 file Excel chuẩn hóa:
   - Dòng tiêu đề có màu xanh dương chuyên nghiệp, chữ trắng in đậm.
   - Đã bật sẵn **Auto-Filter** trên tất cả các cột để bạn dễ dàng lọc theo từng Group hoặc DataType.
