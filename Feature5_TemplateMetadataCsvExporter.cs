@@ -45,7 +45,6 @@ namespace ParamToolbox
             "DataType",
             "Readonly",
             "Required",
-            "Display",
             "InputType",
             "Select",
             "Type"
@@ -53,8 +52,7 @@ namespace ParamToolbox
 
         private static readonly string[] PostParameterColumns =
         {
-            "Description",
-            "ValueType"
+            "Description"
         };
 
         private static readonly HashSet<string> ReservedColumns = new(StringComparer.OrdinalIgnoreCase)
@@ -71,6 +69,7 @@ namespace ParamToolbox
             "HeaderDisplayStyle",
             "HeaderDefaultStyle",
             "HeaderDisplay",
+            "Display",
             "ValueType"
         };
 
@@ -83,8 +82,8 @@ namespace ParamToolbox
                                  "Nhập đường dẫn thư mục chứa file template XML: "));
             string xmlFolderPath = PathHelper.CleanPath(Console.ReadLine());
 
-            Console.Write(I18n.T("Enter output Excel file path (e.g. .../template-metadata.xlsx): ",
-                                 "Nhập đường dẫn và tên file Excel xuất ra (vd: .../template-metadata.xlsx): "));
+            Console.Write(I18n.T("Enter output Excel file path (e.g. .../template-parameter-metadata.xlsx): ",
+                                 "Nhập đường dẫn và tên file Excel xuất ra (vd: .../template-parameter-metadata.xlsx): "));
             string excelPath = PathHelper.CleanPath(Console.ReadLine());
 
             if (!Directory.Exists(xmlFolderPath))
@@ -99,7 +98,7 @@ namespace ParamToolbox
             {
                 excelPath = Path.Combine(
                     Directory.Exists(excelPath) ? excelPath : Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    "template-metadata.xlsx");
+                    "template-parameter-metadata.xlsx");
                 Console.WriteLine(I18n.T($"Will save Excel file at: {excelPath}",
                                          $"Sẽ lưu file Excel tại: {excelPath}"));
             }
@@ -173,6 +172,8 @@ namespace ParamToolbox
 
             return document.Descendants("Parameter")
                 .Where(parameter => parameter.Element("PID") != null)
+                .Where(parameter => !string.Equals(GetElementValue(parameter, "Display"), "false", StringComparison.OrdinalIgnoreCase))
+                .Where(parameter => !string.Equals(GetElementValue(parameter.Parent, "Display"), "false", StringComparison.OrdinalIgnoreCase))
                 .Select(parameter => CreateRow(parameter, templateFileName, groupLookup, fileLookup, parameterColumns))
                 .ToList();
         }
@@ -201,7 +202,6 @@ namespace ParamToolbox
 
             string groupId = GetParameterValue(parameterValues, "GroupID");
             string fileId = GetParameterValue(parameterValues, "FileID");
-            string inputType = GetParameterValue(parameterValues, "InputType");
             XElement? header = parameter.Parent;
 
             groupLookup.TryGetValue(groupId, out var groupInfo);
@@ -219,7 +219,6 @@ namespace ParamToolbox
                     DefaultStyle = GetElementValue(header, "DefaultStyle"),
                     Display = GetElementValue(header, "Display")
                 },
-                ValueType = inputType.Equals("password", StringComparison.OrdinalIgnoreCase) ? "P" : "T",
                 ParameterValues = parameterValues
             };
         }
@@ -290,9 +289,7 @@ namespace ParamToolbox
                 };
 
                 values.AddRange(orderedParameterColumns.Select(column =>
-                    column.Equals("ValueType", StringComparison.OrdinalIgnoreCase)
-                        ? row.ValueType
-                        : row.ParameterValues.TryGetValue(column, out var value) ? value : string.Empty));
+                    row.ParameterValues.TryGetValue(column, out var value) ? value : string.Empty));
 
                 for (int columnIndex = 0; columnIndex < values.Count; columnIndex++)
                 {
@@ -349,7 +346,6 @@ namespace ParamToolbox
             public GroupInfo Group { get; set; } = new GroupInfo();
             public FileInfo File { get; set; } = new FileInfo();
             public HeaderInfo Header { get; set; } = new HeaderInfo();
-            public string ValueType { get; set; } = string.Empty;
             public IReadOnlyDictionary<string, string> ParameterValues { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
